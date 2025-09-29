@@ -1,0 +1,41 @@
+---
+title: "PD_to_endpoint"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# VAS50の解析
+
+- VAS50とは
+  - かゆみのレベルを1~10で患者さん自身に示してもらう。
+  - TIME0のかゆみレベルを基準として、50%以上かゆみレベルが減少したらTRUE, そうでなければFALSEの判定をする。
+- 解析の方法
+  - TIME(h) 0~168まで1h刻みでVAS50のTRUE or FALSEのデータがある。
+  - TIME0を除いて、12h刻みでTRUEの割合を計算する。
+    - ex:1h~12hの間で3h, 6hの時にTRUE
+      - TRUEの回数(2)/12 = 1/6
+      - 12hのときのimprovement ratio = 1/6
+
+以上の解析でimprovement ratioをプロットした結果、以下になった。
+
+![](./inhibition_vs_endpoint/improvement.png){width="70%"}
+
+- スライドにのっているプロットと一致しているので、解析方法はこれであっていそう。
+
+# fitting
+
+improvement ratioを予測するためにログロジスティックモデルでフィッティングをした。
+
+![](./inhibition_vs_endpoint/conc_vs_inhibition.png){width="70%"}
+
+- improvement ratioの最大が70%程度
+- 阻害率58%ほどで35%程度の阻害
+
+# 懸念点
+
+- improvement ratio 100%になることを期待していたがならなかった。
+- このモデルでよい？
+- 解析方法あっている？
